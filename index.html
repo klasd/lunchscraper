@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Dagens lunchmenyer från Tybble, Restaurang 29 och Parken i Örebro.">
+    <title>Lunchrundan</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="Lunchrundan, startsida">
+          <span class="brand-mark" aria-hidden="true">LR</span>
+          <span>Lunchrundan</span>
+        </a>
+        <p class="location"><span aria-hidden="true">●</span> Örebro</p>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">Tre menyer. Ett enklare val.</p>
+          <div class="intro-row">
+            <div>
+              <h1 id="page-title">Vad blir det<br><em>till lunch?</em></h1>
+              <p id="today-label" class="today-label"></p>
+            </div>
+            <p class="intro-copy">Veckans lunch från tre restauranger, samlad på ett ställe. Välj en dag och hitta dagens favorit.</p>
+          </div>
+        </section>
+
+        <nav id="day-picker" class="day-picker" aria-label="Välj veckodag"></nav>
+
+        <section aria-labelledby="menus-heading">
+          <div class="section-heading">
+            <h2 id="menus-heading">På menyn</h2>
+            <button id="refresh-button" class="refresh-button" type="button">
+              <span aria-hidden="true">↻</span> Uppdatera
+            </button>
+          </div>
+          <div id="menu-grid" class="menu-grid" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Menyerna hämtas från restaurangernas egna webbplatser.</p>
+        <p id="updated-label"></p>
+      </footer>
+    </div>
+
+    <template id="restaurant-card-template">
+      <article class="restaurant-card">
+        <header class="card-header">
+          <div>
+            <p class="card-number"></p>
+            <h3 class="restaurant-name"></h3>
+          </div>
+          <p class="week-label"></p>
+        </header>
+        <div class="card-body"></div>
+        <footer class="card-footer">
+          <p class="card-meta"></p>
+          <a class="source-link" target="_blank" rel="noreferrer">Originalmeny <span aria-hidden="true">↗</span></a>
+        </footer>
+      </article>
+    </template>
+  </body>
+</html>
