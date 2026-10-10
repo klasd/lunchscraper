@@ -264,17 +264,28 @@ function parseTybble(html) {
     let sibling = heading.parentElement.nextElementSibling;
     while (sibling && !sibling.querySelector(":scope > strong")) {
       const text = cleanText(sibling.textContent);
-      if (text && !text.includes("[/vc_")) days[day].push({ name: text, description: "" });
+      if (text && !text.includes("[/vc_")) days[day].push(splitTybbleDish(text));
       sibling = sibling.nextElementSibling;
     }
   }
   return { week: extractWeek(weekText), days };
 }
 
+function splitTybbleDish(text) {
+  const separator = text.search(/\smed\s/i);
+  if (separator === -1) return { name: text, description: "" };
+
+  return {
+    name: text.slice(0, separator),
+    description: text.slice(separator + 1),
+  };
+}
+
 function parseRestaurant29(html) {
   const document = parseHtml(html);
-  const menuRoot = document.querySelector(".lunch_menu");
-  if (!menuRoot) throw new Error("29ans meny hittades inte på sidan.");
+  const lunchSection = document.querySelector("section#lunch");
+  const menuRoot = lunchSection?.querySelector(".lunch_menu");
+  if (!lunchSection || !menuRoot) throw new Error("29ans meny hittades inte i sidans lunchsektion.");
 
   const dishes = [...menuRoot.querySelectorAll("ul.myul > li, .myul > li")].map((item) => {
     const parts = [...item.querySelectorAll(":scope > span")].map((span) => cleanText(span.textContent));
@@ -292,8 +303,8 @@ function parseRestaurant29(html) {
 
 function parseParken(html) {
   const document = parseHtml(html);
-  const sheet = document.querySelector(".lunch-week-sheet");
-  if (!sheet) throw new Error("Parkens aktuella veckomeny hittades inte på sidan.");
+  const sheet = document.querySelector("section.lunch-week-sheet");
+  if (!sheet) throw new Error("Parkens meny hittades inte i sidans lunchsektion.");
 
   const days = emptyDays();
   for (const dayElement of sheet.querySelectorAll(".lunch-day")) {
