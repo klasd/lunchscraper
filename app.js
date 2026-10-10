@@ -25,6 +25,12 @@ const restaurants = [
     sourceUrl: "https://www.restaurangparken.se/lunchmeny",
     fetchMenu: fetchParken,
   },
+  {
+    id: "kotthandlarn",
+    name: "Kötthandlarn",
+    sourceUrl: "https://www.kotthandlarn.se/lunch",
+    fetchMenu: fetchKotthandlarn,
+  },
 ];
 
 const state = {
@@ -233,6 +239,10 @@ async function fetchParken() {
   return parseParken(await fetchViaProxy("https://www.restaurangparken.se/lunchmeny"));
 }
 
+async function fetchKotthandlarn() {
+  return parseKotthandlarn(await fetchViaProxy("https://www.kotthandlarn.se/lunch"));
+}
+
 async function fetchViaProxy(url) {
   const response = await fetchWithTimeout(`${PROXY_BASE_URL}${encodeURIComponent(url)}`);
   return response.text();
@@ -332,6 +342,47 @@ function parseParken(html) {
   }
   return {
     week: extractWeek(sheet.querySelector(".lunch-sheet-header h2")?.textContent),
+    days,
+  };
+}
+
+function parseKotthandlarn(html) {
+  const document = parseHtml(html);
+  const menuRoot = document.querySelector("main#main");
+  if (!menuRoot) throw new Error("Kötthandlarns lunchsektion hittades inte på sidan.");
+
+  const days = emptyDays();
+  const specialLabel = [...menuRoot.querySelectorAll("span")]
+    .find((element) => cleanText(element.textContent).toLocaleLowerCase("sv-SE") === "veckans special");
+  const specialRoot = specialLabel?.closest("div.relative");
+  const specialParagraphs = specialRoot
+    ? [...specialRoot.querySelectorAll(":scope > div p")].map((element) => cleanText(element.textContent))
+    : [];
+  const specialName = cleanText(specialRoot?.querySelector("h2")?.textContent);
+  const special = specialName ? {
+    name: specialName,
+    description: specialParagraphs[1] || "Veckans special",
+    price: specialParagraphs[2] || "",
+  } : null;
+
+  const candidates = [...menuRoot.querySelectorAll("div")];
+  for (const card of candidates) {
+    const directParagraphs = [...card.children].filter((element) => element.tagName === "P");
+    const dayText = cleanText(directParagraphs[0]?.textContent);
+    const day = WEEKDAYS.find((candidate) => sameDay(dayText, candidate));
+    const heading = card.querySelector(":scope > h3");
+    if (!day || !heading) continue;
+
+    days[day].push({
+      name: cleanText(heading.textContent),
+      description: cleanText(directParagraphs[1]?.textContent),
+      price: cleanText(directParagraphs[2]?.textContent),
+    });
+    if (special) days[day].push({ ...special });
+  }
+
+  return {
+    week: extractWeek(menuRoot.querySelector("h1")?.textContent),
     days,
   };
 }

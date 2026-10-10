@@ -1,6 +1,6 @@
 # Lunchrundan
 
-En statisk sida som samlar lunchmenyer från Restaurang Tybble, Restaurang 29 och Restaurang Parken i Örebro.
+En statisk sida som samlar lunchmenyer från Restaurang Tybble, Restaurang 29, Restaurang Parken och Kötthandlarn i Örebro.
 
 Sidan består endast av HTML, CSS och vanlig JavaScript. Ingen byggprocess eller serverkod behövs på webbhotellet.
 
@@ -18,7 +18,7 @@ Ladda upp `index.html`, `styles.css` och `app.js` till samma katalog på webbhot
 
 ## Hämtning och CORS
 
-Tybble hämtas direkt från restaurangens WordPress-API. Restaurang 29 och Parken tillåter inte direkt läsning från en annan webbplats och hämtas därför via AllOrigins.
+Tybble hämtas direkt från restaurangens WordPress-API. Restaurang 29, Parken och Kötthandlarn tillåter inte direkt läsning från en annan webbplats och hämtas därför via AllOrigins.
 
 Proxyadressen finns högst upp i `app.js`:
 
@@ -31,5 +31,7 @@ AllOrigins är en kostnadsfri tredjepartstjänst och kan vara långsam eller til
 Varje restaurang laddas oberoende. Vid fel visas senast sparade meny från `localStorage`, om en sådan finns, samt en direktlänk till restaurangens originalmeny.
 
 Restaurang 29 publicerar för närvarande val för hela veckan, så samma alternativ visas måndag till fredag.
+
+Kötthandlarn publicerar en rätt per vardag och en veckospecial. Veckospecialen visas tillsammans med dagens rätt.
 
 Fjärrinnehåll renderas aldrig som HTML. Parsern extraherar text och gränssnittet infogar den med `textContent`.

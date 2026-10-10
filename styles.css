@@ -210,6 +210,7 @@ h1 em { color: var(--green); font-weight: 400; }
 
 .restaurant-card:nth-child(2) .card-number { color: var(--orange); background: var(--orange-light); }
 .restaurant-card:nth-child(3) .card-number { color: #76590c; background: #f4e9bf; }
+.restaurant-card:nth-child(4) .card-number { color: #655084; background: #e9e0f2; }
 
 .card-header, .card-footer {
   display: flex;
@@ -364,6 +365,10 @@ h1 em { color: var(--green); font-weight: 400; }
   .intro-copy { max-width: 520px; margin-left: 0; }
   .menu-grid { grid-template-columns: 1fr; }
   .restaurant-card { min-height: 0; }
+}
+
+@media (min-width: 901px) {
+  .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 600px) {
