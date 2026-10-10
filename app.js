@@ -314,7 +314,7 @@ function parseParken(html) {
 
     for (const item of dayElement.querySelectorAll("ol > li")) {
       days[day].push({
-        name: cleanText(item.querySelector("strong")?.textContent || item.textContent),
+        name: sentenceCase(cleanText(item.querySelector("strong")?.textContent || item.textContent)),
         description: cleanText(item.querySelector("span")?.textContent),
       });
     }
@@ -324,7 +324,7 @@ function parseParken(html) {
       const name = cleanText(vegetarian.querySelector("strong")?.textContent);
       const fullText = cleanText(vegetarian.textContent);
       days[day].push({
-        name: name || fullText,
+        name: sentenceCase(name || fullText),
         description: name ? cleanText(fullText.slice(name.length)) : "",
         vegetarian: true,
       });
@@ -352,6 +352,12 @@ function sameDay(value, day) {
 
 function cleanText(value = "") {
   return value.replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function sentenceCase(value) {
+  if (!value) return "";
+  const lowerCase = value.toLocaleLowerCase("sv-SE");
+  return lowerCase.charAt(0).toLocaleUpperCase("sv-SE") + lowerCase.slice(1);
 }
 
 function extractWeek(value = "") {
