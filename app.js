@@ -2,6 +2,7 @@
 
 // Replace this if you move to another proxy using the same `?url=` format.
 const PROXY_BASE_URL = "https://api.allorigins.win/raw?url=";
+const KOTTHANDLARN_DATA_URL = "https://raw.githubusercontent.com/klasd/lunchscraper/main/data/kotthandlarn.json";
 const REQUEST_TIMEOUT_MS = 12000;
 const CACHE_PREFIX = "lunchrundan:v1:";
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"];
@@ -240,7 +241,13 @@ async function fetchParken() {
 }
 
 async function fetchKotthandlarn() {
-  return parseKotthandlarn(await fetchViaProxy("https://www.kotthandlarn.se/lunch"));
+  try {
+    const response = await fetchWithTimeout(`${KOTTHANDLARN_DATA_URL}?t=${Date.now()}`);
+    return response.json();
+  } catch {
+    const response = await fetchWithTimeout(`data/kotthandlarn.json?t=${Date.now()}`);
+    return response.json();
+  }
 }
 
 async function fetchViaProxy(url) {
@@ -342,47 +349,6 @@ function parseParken(html) {
   }
   return {
     week: extractWeek(sheet.querySelector(".lunch-sheet-header h2")?.textContent),
-    days,
-  };
-}
-
-function parseKotthandlarn(html) {
-  const document = parseHtml(html);
-  const menuRoot = document.querySelector("main#main");
-  if (!menuRoot) throw new Error("Kötthandlarns lunchsektion hittades inte på sidan.");
-
-  const days = emptyDays();
-  const specialLabel = [...menuRoot.querySelectorAll("span")]
-    .find((element) => cleanText(element.textContent).toLocaleLowerCase("sv-SE") === "veckans special");
-  const specialRoot = specialLabel?.closest("div.relative");
-  const specialParagraphs = specialRoot
-    ? [...specialRoot.querySelectorAll(":scope > div p")].map((element) => cleanText(element.textContent))
-    : [];
-  const specialName = cleanText(specialRoot?.querySelector("h2")?.textContent);
-  const special = specialName ? {
-    name: specialName,
-    description: specialParagraphs[1] || "Veckans special",
-    price: specialParagraphs[2] || "",
-  } : null;
-
-  const candidates = [...menuRoot.querySelectorAll("div")];
-  for (const card of candidates) {
-    const directParagraphs = [...card.children].filter((element) => element.tagName === "P");
-    const dayText = cleanText(directParagraphs[0]?.textContent);
-    const day = WEEKDAYS.find((candidate) => sameDay(dayText, candidate));
-    const heading = card.querySelector(":scope > h3");
-    if (!day || !heading) continue;
-
-    days[day].push({
-      name: cleanText(heading.textContent),
-      description: cleanText(directParagraphs[1]?.textContent),
-      price: cleanText(directParagraphs[2]?.textContent),
-    });
-    if (special) days[day].push({ ...special });
-  }
-
-  return {
-    week: extractWeek(menuRoot.querySelector("h1")?.textContent),
     days,
   };
 }

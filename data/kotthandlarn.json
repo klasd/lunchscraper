@@ -1,0 +1,65 @@
+{
+  "week": "42",
+  "days": {
+    "Måndag": [
+      {
+        "name": "Kalvfärsbiffar",
+        "description": "Serveras med Potatismos, Schalottenlökssås, Smörad Spetskål, Rödvinsbärs Gelé",
+        "price": "145 kr"
+      },
+      {
+        "name": "Smörstekt Svensk Entrecote",
+        "description": "Serveras med Friterad Klyftpotatis, Bearnaisesås & Sky, samt Frästa Grönsaker",
+        "price": "229 kr"
+      }
+    ],
+    "Tisdag": [
+      {
+        "name": "Ungersk Gulasch Gryta (Het)",
+        "description": "Serveras med Potatispuré, Smetana & Örter",
+        "price": "145 kr"
+      },
+      {
+        "name": "Smörstekt Svensk Entrecote",
+        "description": "Serveras med Friterad Klyftpotatis, Bearnaisesås & Sky, samt Frästa Grönsaker",
+        "price": "229 kr"
+      }
+    ],
+    "Onsdag": [
+      {
+        "name": "Nattbakat Högrev",
+        "description": "Serveras med Rostad Kulpotatis, Enbärspicklad Silverlök, Tryffelsås & Semibakad Tomat",
+        "price": "145 kr"
+      },
+      {
+        "name": "Smörstekt Svensk Entrecote",
+        "description": "Serveras med Friterad Klyftpotatis, Bearnaisesås & Sky, samt Frästa Grönsaker",
+        "price": "229 kr"
+      }
+    ],
+    "Torsdag": [
+      {
+        "name": "Kalvstek",
+        "description": "Serveras med Kantarellsås, Kokt Potatis & Ångade Gröna Bönor & Ärtor",
+        "price": "145 kr"
+      },
+      {
+        "name": "Smörstekt Svensk Entrecote",
+        "description": "Serveras med Friterad Klyftpotatis, Bearnaisesås & Sky, samt Frästa Grönsaker",
+        "price": "229 kr"
+      }
+    ],
+    "Fredag": [
+      {
+        "name": "BBQ Black Angus Brisket (Bringa)",
+        "description": "Serveras med Barbecuesås, Mac N´Chesse m. Jalapeno, Carolinaslaw & Chipotle Rostad Potatis",
+        "price": "145 kr"
+      },
+      {
+        "name": "Smörstekt Svensk Entrecote",
+        "description": "Serveras med Friterad Klyftpotatis, Bearnaisesås & Sky, samt Frästa Grönsaker",
+        "price": "229 kr"
+      }
+    ]
+  }
+}

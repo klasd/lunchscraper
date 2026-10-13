@@ -14,11 +14,11 @@ python3 -m http.server 8000
 
 ## Publicering
 
-Ladda upp `index.html`, `styles.css` och `app.js` till samma katalog på webbhotellet.
+Ladda upp `index.html`, `styles.css`, `app.js` och katalogen `data` till webbhotellet. Kötthandlarn läses i första hand från GitHubs uppdaterade JSON-fil och använder den lokala filen som reserv.
 
 ## Hämtning och CORS
 
-Tybble hämtas direkt från restaurangens WordPress-API. Restaurang 29, Parken och Kötthandlarn tillåter inte direkt läsning från en annan webbplats och hämtas därför via AllOrigins.
+Tybble hämtas direkt från restaurangens WordPress-API. Restaurang 29 och Parken tillåter inte direkt läsning från en annan webbplats och hämtas därför via AllOrigins.
 
 Proxyadressen finns högst upp i `app.js`:
 
@@ -32,6 +32,12 @@ Varje restaurang laddas oberoende. Vid fel visas senast sparade meny från `loca
 
 Restaurang 29 publicerar för närvarande val för hela veckan, så samma alternativ visas måndag till fredag.
 
-Kötthandlarn publicerar en rätt per vardag och en veckospecial. Veckospecialen visas tillsammans med dagens rätt.
+Kötthandlarn publicerar en rätt per vardag och en veckospecial. Sajten skyddas av Cloudflare och blockerar offentliga CORS-proxyer. Workflow-filen `.github/workflows/update-kotthandlarn.yml` hämtar därför menyn till `data/kotthandlarn.json` två gånger per vardag och på söndagskvällen. Lunchrundan läser JSON-filen från GitHubs CORS-aktiverade raw-adress. Veckospecialen visas tillsammans med dagens rätt.
+
+Workflowen kan även köras manuellt från fliken **Actions** på GitHub. För att testa eller uppdatera JSON-filen lokalt:
+
+```sh
+node scripts/scrape-kotthandlarn.mjs
+```
 
 Fjärrinnehåll renderas aldrig som HTML. Parsern extraherar text och gränssnittet infogar den med `textContent`.
